@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "codepipeline_bucket" {
   bucket        = "${var.project_name}-pipeline-artifacts-${data.aws_caller_identity.current.account_id}"
-  acl           = "private"
 
   force_destroy = true
   tags          = local.tags
@@ -48,13 +47,9 @@ EOF
     {
       "Effect": "Allow",
       "Action": [
-        "codecommit:CancelUploadArchive",
-        "codecommit:GetBranch",
-        "codecommit:GetCommit",
-        "codecommit:GetUploadArchiveStatus",
-        "codecommit:UploadArchive"
+        "codestar-connections:UseConnection"
       ],
-      "Resource": "*"
+      "Resource": "${var.github_connection_arn}"
     },
     {
       "Effect": "Allow",
@@ -107,14 +102,15 @@ resource "aws_codepipeline" "codepipeline" {
       name             = "Source"
       category         = "Source"
       owner            = "AWS"
-      provider         = "CodeCommit"
+      provider         = "CodeStarSourceConnection"
       version          = "1"
       output_artifacts = ["Source_output"]
 
       configuration = {
-        RepositoryName       = "${var.project_name}"
-        BranchName           = "${var.repo_default_branch}"
-        PollForSourceChanges = "false"
+        ConnectionArn        = var.github_connection_arn
+        FullRepositoryId     = var.github_full_repository_id
+        BranchName           = var.repo_default_branch
+        DetectChanges        = "true"
       }
     }
   }

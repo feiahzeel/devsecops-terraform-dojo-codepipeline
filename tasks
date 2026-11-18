@@ -2,7 +2,7 @@
 
 set -Eeo pipefail
 
-export AWS_DEFAULT_REGION="eu-west-1"
+export AWS_DEFAULT_REGION="us-east-1"
 export project_name="terraform-dojo-codepipeline"
 export TF_VAR_project_name="${project_name}"
 

@@ -59,3 +59,13 @@ variable "buildspec_test" {
 variable "run_tf_static_checks_parallely" {
   default = false
 }
+
+variable "github_connection_arn" {
+  description = "ARN de CodeConnections/CodeStar hacia GitHub"
+  type        = string
+}
+
+variable "github_full_repository_id" {
+  description = "Repositorio de GitHub en formato usuario/repo"
+  type        = string
+}
