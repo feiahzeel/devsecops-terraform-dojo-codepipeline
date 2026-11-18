@@ -71,6 +71,6 @@ resource "aws_ssm_parameter" "app_version" {
   description = "Version de la aplicacion desplegada por CI/CD"
   type        = "SecureString"
   key_id      = aws_kms_key.my_key.arn
-  value       = "v1.0.0"
+  value       = "v1.0.1"
   tags        = local.tags
 }

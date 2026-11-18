@@ -81,9 +81,22 @@ locals {
 }
 
 resource "aws_codepipeline" "codepipeline" {
-  name       = var.project_name
-  role_arn   = aws_iam_role.codepipeline_role.arn
-  tags       = local.tags
+  name          = var.project_name
+  role_arn      = aws_iam_role.codepipeline_role.arn
+  pipeline_type = "V2"
+  tags          = local.tags
+
+  trigger {
+    provider_type = "CodeStarSourceConnection"
+    git_configuration {
+      source_action_name = "Source"
+      push {
+        branches {
+          includes = [var.repo_default_branch]
+        }
+      }
+    }
+  }
 
   artifact_store {
     location = aws_s3_bucket.codepipeline_bucket.bucket
